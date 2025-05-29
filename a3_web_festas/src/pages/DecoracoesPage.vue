@@ -1,9 +1,11 @@
-<template>Decorações tusabi</template>
+<template>
+</template>
+
 
 <script>
 export default {
-  name: 'DecoracoesPage',
-}
+  name: "DecoracoesPage",
+};
 </script>
 
 <style></style>
