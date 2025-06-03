@@ -17,6 +17,11 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/DecoracoesPage.vue') }],
   },
+  {
+    path: '/Carrinho',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/CarrinhoPage.vue') }],
+  },
 
   {
     path: '/MinhaConta',
