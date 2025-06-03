@@ -39,6 +39,10 @@ const linksList = [
     to: '/Decoracoes',
   },
   {
+    title: 'Carrinho',
+    to: '/Carrinho',
+  },
+  {
     title: 'Minha Conta',
     icon: 'favorite',
     to: '/MinhaConta',
