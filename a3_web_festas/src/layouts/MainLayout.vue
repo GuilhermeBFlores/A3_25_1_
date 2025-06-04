@@ -40,7 +40,9 @@ const linksList = [
   },
   {
     title: 'Carrinho',
-    to: '/Carrinho',
+    icon: 'shopping_cart',
+    to: '/CarrinhoPage',
+    
   },
   {
     title: 'Minha Conta',
