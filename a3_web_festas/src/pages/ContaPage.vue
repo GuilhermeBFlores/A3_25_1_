@@ -1,124 +1,213 @@
-`Login.vue`
-```vue
 <template>
-  <q-page class="flex flex-center bg-gradient">
-    <q-card class="login-card q-pa-md">
-      <div class="login-title">Login do Usuário</div>
+  <q-page padding class="row justify-center items-center" style="height: 100vh; background: linear-gradient(135deg, #667eea, #764ba2);">
+    <q-card class="col-xs-11 col-sm-8 col-md-5 col-4 q-pa-xl" flat bordered>
+      
+      <!-- Mensagem de feedback ao usuário -->
+      <q-banner v-if="feedbackMessage" :class="{'bg-positive text-white': isSuccess, 'bg-negative text-white': !isSuccess}" dense class="q-mt-md">
+        {{ feedbackMessage }}
+      </q-banner>
 
-      <q-form @submit.prevent="submitLogin" ref="loginForm" class="q-gutter-md">
-        <q-input
-          filled
-          v-model="email"
-          label="E-mail"
-          type="email"
-          :rules="[val => val && val.length > 0 || 'Digite o e-mail']"
-          lazy-rules
-          autofocus
-        />
-        <q-input
-          filled
-          v-model="password"
-          label="Senha"
-          type="password"
-          :rules="[val => val && val.length > 0 || 'Digite a senha']"
-          lazy-rules
-        />
-        <div class="row justify-between items-center q-mt-md">
-          <q-btn type="submit" label="Entrar" color="primary" unelevated />
-          <div role="button" tabindex="0" class="forgot-password" @click="forgotPasswordDialog = true" @keyup.enter="forgotPasswordDialog = true">Esqueci minha senha</div>
+      <!-- Formulários de login e cadastro -->
+      <div v-if="!isLoggedIn || !isSessionChecked">
+        <q-tabs
+          v-model="activeTab"
+          dense
+          class="text-primary"
+          active-color="primary"
+          indicator-color="primary"
+        >
+          <q-tab name="login" label="Login" icon="login" /> 
+          <q-tab name="register" label="Cadastro" icon="person_add" />
+        </q-tabs>
+
+        <q-separator />
+
+        <!-- Formulário de Login -->
+        <div v-show="activeTab === 'login'">
+          <q-form @submit.prevent="processLogin" ref="loginForm" class="q-gutter-md">
+            <q-input
+              filled
+              label="Usuário"
+              v-model="loginUsername"
+              :rules="[ val => !!val || 'Usuário é obrigatório' ]"
+              lazy-rules
+              autofocus
+            />
+            <q-input
+              filled
+              type="password"
+              label="Senha"
+              v-model="loginPassword"
+              :rules="[ val => !!val || 'Senha é obrigatória' ]"
+              lazy-rules
+            />
+            <q-btn type="submit" color="primary" label="Entrar" unelevated class="full-width" />
+          </q-form>
         </div>
-      </q-form>
+
+        <!-- Formulário de Cadastro -->
+        <div v-show="activeTab === 'register'">
+          <q-form @submit.prevent="processRegistration" ref="registerForm" class="q-gutter-md">
+            <q-input
+              filled
+              label="Usuário"
+              v-model="registerUsername"
+              :rules="[ val => !!val || 'Usuário é obrigatório' ]"
+              lazy-rules
+              autofocus
+            />
+            <q-input
+              filled
+              type="password"
+              label="Senha"
+              v-model="registerPassword"
+              :rules="[ val => !!val || 'Senha é obrigatória' ]"
+              lazy-rules
+            />
+            <q-btn type="submit" color="secondary" label="Cadastrar" unelevated class="full-width" />
+          </q-form>
+        </div>
+      </div>
+
+      <!-- Informações do usuário logado e botão de logout -->
+      <div v-if="isLoggedIn && isSessionChecked" class="q-mt-xl q-pa-md bg-grey-2 text-center rounded-borders">
+        <div class="text-h6 q-mb-md">Usuário: {{ currentUsername }}</div>
+        <q-btn color="negative" label="Logout" @click="processLogout" unelevated />
+      </div>
     </q-card>
-
-    <!-- Dialog Esqueci Minha Senha -->
-    <q-dialog v-model="forgotPasswordDialog" persistent>
-      <q-card style="min-width: 300px;">
-        <q-card-section>
-          <div class="text-h6">Recuperar Senha</div>
-          <div class="text-subtitle2 q-mt-sm">Informe seu e-mail para recuperação da senha</div>
-        </q-card-section>
-
-        <q-card-section>
-          <q-input
-            filled
-            v-model="forgotEmail"
-            label="E-mail"
-            type="email"
-            :rules="[val => val && val.length > 0 || 'Digite o e-mail']"
-          />
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="primary" v-close-popup />
-          <q-btn flat label="Enviar" color="primary" @click="sendForgotPassword" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </q-page>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useQuasar } from 'quasar'
+import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
-const $q = useQuasar()
+const router = useRouter()
 
-const email = ref('')
-const password = ref('')
-const forgotPasswordDialog = ref(false)
-const forgotEmail = ref('')
+// Variáveis reativas para controle de estado
+const activeTab = ref('login')
+const loginUsername = ref('')
+const loginPassword = ref('')
+const registerUsername = ref('')
+const registerPassword = ref('')
 
-function submitLogin() {
-  if (!email.value) {
-    $q.notify({ type: 'negative', message: 'Por favor, informe o e-mail' })
-    return
-  }
-  if (!password.value) {
-    $q.notify({ type: 'negative', message: 'Por favor, informe a senha' })
-    return
-  }
-  // Simulação da ação de login
-  // Aqui você faria a chamada real do backend para autenticação.
-  $q.notify({ type: 'positive', message: `Login efetuado com sucesso para: ${email.value}` })
-  email.value = ''
-  password.value = ''
+const feedbackMessage = ref('')
+const isSuccess = ref(false)
+
+const loginForm = ref(null)
+const registerForm = ref(null)
+
+const isLoggedIn = ref(false)
+const currentUsername = ref('')
+const isSessionChecked = ref(false)
+
+// Funções para manipulação de usuários e sessão
+function getUsers() {
+  const data = localStorage.getItem('users')
+  return data ? JSON.parse(data) : {}
 }
 
-function sendForgotPassword() {
-  if (!forgotEmail.value) {
-    $q.notify({ type: 'negative', message: 'Por favor, informe o e-mail para recuperação' })
+function saveUsers(users) {
+  localStorage.setItem('users', JSON.stringify(users))
+}
+
+function saveSession(user) {
+  localStorage.setItem('sessionUser ', user)
+}
+
+function getSession() {
+  return localStorage.getItem('sessionUser ') || ''
+}
+
+function clearSession() {
+  localStorage.removeItem('sessionUser ')
+}
+
+// Função para processar o cadastro de um novo usuário
+function processRegistration() {
+  if (!registerForm.value.validate()) {
+    feedbackMessage.value = ''
     return
   }
-  // Simulação de envio de e-mail para recuperação
-  $q.notify({ type: 'positive', message: `Instruções de recuperação enviadas para: ${forgotEmail.value}` })
-  forgotPasswordDialog.value = false
-  forgotEmail.value = ''
+
+  let users = getUsers()
+  if (users[registerUsername.value]) {
+    feedbackMessage.value = 'Usuário já existe!'
+    isSuccess.value = false
+    return
+  }
+
+  users[registerUsername.value] = registerPassword.value
+  saveUsers(users)
+
+  feedbackMessage.value = 'Cadastro realizado com sucesso! Agora faça login.'
+  isSuccess.value = true
+  registerUsername.value = ''
+  registerPassword.value = ''
+  activeTab.value = 'login'
 }
+
+// Função para processar o login do usuário
+function processLogin() {
+  if (!loginForm.value.validate()) {
+    feedbackMessage.value = ''
+    return
+  }
+
+  const users = getUsers()
+  if (!users[loginUsername.value]) {
+    feedbackMessage.value = 'Usuário não encontrado!'
+    isSuccess.value = false
+    return
+  }
+
+  if (users[loginUsername.value] !== loginPassword.value) {
+    feedbackMessage.value = 'Senha incorreta!'
+    isSuccess.value = false
+    return
+  }
+
+  feedbackMessage.value = 'Login efetuado com sucesso! Bem-vindo, ' + loginUsername.value
+  isSuccess.value = true
+  isLoggedIn.value = true
+  currentUsername.value = loginUsername.value
+  saveSession(loginUsername.value)
+
+  // Limpar campos de login
+  loginUsername.value = ''
+  loginPassword.value = ''
+
+  // Redirecionar para a página do carrinho
+  router.push('/Carrinho')
+}
+
+// Função para processar o logout do usuário
+function processLogout() {
+  isLoggedIn.value = false
+  currentUsername.value = ''
+  clearSession()
+  feedbackMessage.value = 'Você saiu da conta.'
+  isSuccess.value = true
+  activeTab.value = 'login'
+}
+
+// Restaurar sessão se existir
+const sessionUser  = getSession()
+if (sessionUser ) {
+  isLoggedIn.value = true
+  currentUsername.value = sessionUser 
+  feedbackMessage.value = 'Sessão restaurada. Bem-vindo, ' + sessionUser 
+  isSuccess.value = true
+}
+isSessionChecked.value = true
+
+// Limpar mensagem e campos ao trocar de aba
+watch(activeTab, () => {
+  feedbackMessage.value = ''
+  isSuccess.value = false
+  loginUsername.value = ''
+  loginPassword.value = ''
+  registerUsername.value = ''
+  registerPassword.value = ''
+})
 </script>
-
-<style scoped>
-.bg-gradient {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1d2b64, #f8cdda);
-}
-.login-card {
-  width: 360px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.2);
-  background-color: white;
-}
-.login-title {
-  font-weight: 700;
-  font-size: 1.8rem;
-  color: #1976d2;
-  margin-bottom: 20px;
-  text-align: center;
-}
-.forgot-password {
-  cursor: pointer;
-  color: #1976d2;
-  font-weight: 600;
-  text-decoration: underline;
-  user-select: none;
-}
-</style>
