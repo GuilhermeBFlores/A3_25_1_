@@ -1,77 +1,113 @@
 <template>
-    <div class="container">
-      <h1>Carrinho</h1>
-  
-      <h2>Produtos</h2>
-      <div v-for="product in products" :key="product.id" class="product">
-        <p>{{ product.name }} - R$ {{ product.price.toFixed(2) }}</p>
-        <button @click="addToCart(product)">Adicionar ao Carrinho</button>
-      </div>
-  
-      <h3>Carrinho</h3>
-      <div v-if="cart.length > 0">
-        <div v-for="(item, index) in cart" :key="index" class="cart-item">
-          <p>{{ item.name }} - R$ {{ item.price.toFixed(2) }}</p>
-          <button @click="removeFromCart(index)">Remover</button>
-        </div>
-        <p><strong>Total:</strong> R$ {{ total.toFixed(2) }}</p>
-      </div>
-      <div v-else>
-        <p>Carrinho vazio.</p>
-      </div>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref, computed } from 'vue'
-  
-  const products = ref([
-    { id: 1, name: 'Decoração do Ben10', price: 190 },
-    { id: 2, name: 'Decoração do Mario', price: 150 },
-    { id: 3, name: 'Decoração do Fortnite', price: 200 }
-  ])
-  
-  const cart = ref([])
-  
-  function addToCart(product) {
-    cart.value.push(product)
+  <q-page padding>
+  <q-list v-if="carrinhoItems.length > 0">
+  <carrinho-item v-for="item in carrinhoItems" :key="item.id" :item="item"
+  @quantidade-nova="quantidadeNova" @remove-item="removeItem" />
+  </q-list>
+  <div v-else>
+  Seu carrinho está vazio.
+  </div>
+ 
+
+  <div class="text-right q-mt-md">
+  Total: R$ {{ total }}
+  </div>
+ 
+
+  <q-btn v-if="carrinhoItems.length > 0" color="primary" label="Finalizar Compra" class="q-mt-md" />
+  </q-page>
+ </template>
+ 
+
+ <script>
+ import { defineComponent, ref, computed, onMounted } from 'vue';
+ import CarrinhoItem from 'components/CarrinhoItem.vue';
+ import { cluster, connectToDB } from 'quasarDB.js';
+ 
+
+ export default defineComponent({
+  name: 'CarrinhoPage',
+  components: {
+  CarrinhoItem
+  },
+  setup() {
+  const carrinhoItems = ref([]);
+  const carrinhoTableName = 'carrinho_items'; // Nome da tabela no QuasarDB
+ 
+
+  onMounted(async () => {
+  await connectToDB();
+  await carregaCarrinhoItems();
+  });
+ 
+
+  const carregaCarrinhoItems = async () => {
+  try {
+  const table = cluster.table(cartTableName);
+  const query = `SELECT * FROM ${cartTableName}`;
+  const result = await table.query(query);
+  carrinhoItems.value = result.rows.map(row => ({
+  id: row[0],
+  name: row[1],
+  price: row[2],
+  quantity: row[3]
+  }));
+  } catch (error) {
+  console.error('Erro ao carregar itens do carrinho do QuasarDB:', error);
   }
-  
-  function removeFromCart(index) {
-    cart.value.splice(index, 1)
+  };
+ 
+
+  const subtotal = computed(() => {
+  return carrinhoItems.value.reduce((total, item) => total + (item.preco * item.quantidade), 0);
+  });
+ 
+
+  const total = computed(() => {
+  // Adicionar lógica para frete e outros custos, se necessário
+  return subtotal.value;
+  });
+ 
+
+  const quantidadeNova = async ({ item, quantidade }) => {
+  try {
+  const table = cluster.table(cartTableName);
+  await table.update({
+  where: qdb.eq(qdb.stringCol('id'), item.id),
+  set: {
+  quantidade: quantidade
   }
-  
-  const total = computed(() =>
-    cart.value.reduce((sum, item) => sum + item.price, 0)
-  )
-  </script>
-  
-  <style>
-  .container {
-    font-family: Arial, sans-serif;
-    max-width: 600px;
-    margin: auto;
+  });
+  const index = carrinhoItems.value.findIndex(carrinhoItem => carrinhotItem.id === item.id);
+  if (index !== -1) {
+  carrinhoItems.value[index].quantidade = quantidade;
   }
-  .product, .cart-item {
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
+  } catch (error) {
+  console.error('Erro ao atualizar a quantidade no QuasarDB:', error);
   }
-  button {
-    margin-top: 5px;
+  };
+ 
+
+  const removeItem = async (item) => {
+  try {
+  const table = cluster.table(cartTableName);
+  await table.delete({
+  where: qdb.eq(qdb.stringCol('id'), item.id)
+  });
+  carrinhotItems.value = carrinhotItems.value.filter(carrinhotItem => carrinhotItem.id !== item.id);
+  } catch (error) {
+  console.error('Erro ao remover item do QuasarDB:', error);
   }
-  
-  h1 {
-    font-size: 50px; 
+  };
+ 
+
+  return {
+  carrinhotItems,
+  subtotal,
+  total,
+  quantidadeNova,
+  removeItem
+  };
   }
-  
-  h2 {
-    font-size:30px; 
-  }
-  
-  h3 {
-    font-size: 30px; 
-  }
-  </style>
-  
-  
-  
+ });
+ </script>
