@@ -29,7 +29,11 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/About.vue') }],
   },
-
+  {
+    path: '/Carrinho',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/CarrinhoPage.vue') }],
+  },
   
 ]
 
