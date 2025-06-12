@@ -17,17 +17,21 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/DecoracoesPage.vue') }],
   },
-  {
-    path: '/Carrinho',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/CarrinhoPage.vue') }],
-  },
 
   {
     path: '/MinhaConta',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/ContaPage.vue') }],
   },
+
+  {
+    path: '/Sobre',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/About.vue') }],
+  },
+
+  
 ]
 
 export default routes
+
