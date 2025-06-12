@@ -1,113 +1,67 @@
 <template>
-  <q-page padding>
-  <q-list v-if="carrinhoItems.length > 0">
-  <carrinho-item v-for="item in carrinhoItems" :key="item.id" :item="item"
-  @quantidade-nova="quantidadeNova" @remove-item="removeItem" />
-  </q-list>
-  <div v-else>
-  Seu carrinho está vazio.
-  </div>
- 
+  <q-page>
+    <h2>Produtos</h2>
+    <q-list>
+      <q-item v-for="produto in carrinhoStore.produtos" :key="produto.id">
+        <q-item-section>
+          <q-item-label>{{ produto.nome }}</q-item-label>
+          <q-item-label caption>{{ produto.descricao }}</q-item-label>
+          <q-item-label>R$ {{ produto.preco.toFixed(2) }}</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn
+            color="primary"
+            label="Adicionar ao Carrinho"
+            @click="carrinhoStore.adicionarAoCarrinho(produto.id, 1)"
+          />
+        </q-item-section>
+      </q-item>
+    </q-list>
 
-  <div class="text-right q-mt-md">
-  Total: R$ {{ total }}
-  </div>
- 
-
-  <q-btn v-if="carrinhoItems.length > 0" color="primary" label="Finalizar Compra" class="q-mt-md" />
+    <h2>Carrinho</h2>
+    <q-list>
+      <q-item v-for="item in carrinhoStore.carrinho" :key="item.produtoId">
+        <q-item-section>
+          <q-item-label>
+            {{ getProdutoNome(item.produtoId) }} ({{ item.quantidade }}x)
+          </q-item-label>
+          <q-item-label caption>R$ {{ item.precoTotal.toFixed(2) }}</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-btn
+            color="negative"
+            label="Remover"
+            @click="carrinhoStore.removerDoCarrinho(item.produtoId)"
+          />
+        </q-item-section>
+      </q-item>
+    </q-list>
+    <h3>Total: R$ {{ carrinhoStore.totalCarrinho }}</h3>
   </q-page>
- </template>
- 
+</template>
 
- <script>
- import { defineComponent, ref, computed, onMounted } from 'vue';
- import CarrinhoItem from 'components/CarrinhoItem.vue';
- import { cluster, connectToDB } from 'quasarDB.js';
- 
+<script setup>
+import { useCarrinhoStore } from 'src/stores/carrinho-store';
+import { onMounted } from 'vue';
 
- export default defineComponent({
-  name: 'CarrinhoPage',
-  components: {
-  CarrinhoItem
-  },
-  setup() {
-  const carrinhoItems = ref([]);
-  const carrinhoTableName = 'carrinho_items'; // Nome da tabela no QuasarDB
- 
+const carrinhoStore = useCarrinhoStore();
 
-  onMounted(async () => {
-  await connectToDB();
-  await carregaCarrinhoItems();
-  });
- 
+onMounted(() => {
+  carrinhoStore.carregarDados();
+});
 
-  const carregaCarrinhoItems = async () => {
-  try {
-  const table = cluster.table(cartTableName);
-  const query = `SELECT * FROM ${cartTableName}`;
-  const result = await table.query(query);
-  carrinhoItems.value = result.rows.map(row => ({
-  id: row[0],
-  name: row[1],
-  price: row[2],
-  quantity: row[3]
-  }));
-  } catch (error) {
-  console.error('Erro ao carregar itens do carrinho do QuasarDB:', error);
-  }
-  };
- 
+function getProdutoNome(produtoId) {
+  const produto = carrinhoStore.produtos.find(p => p.id === produtoId);
+  return produto ? produto.nome : 'Produto não encontrado';
+}
+</script>
 
-  const subtotal = computed(() => {
-  return carrinhoItems.value.reduce((total, item) => total + (item.preco * item.quantidade), 0);
-  });
- 
-
-  const total = computed(() => {
-  // Adicionar lógica para frete e outros custos, se necessário
-  return subtotal.value;
-  });
- 
-
-  const quantidadeNova = async ({ item, quantidade }) => {
-  try {
-  const table = cluster.table(cartTableName);
-  await table.update({
-  where: qdb.eq(qdb.stringCol('id'), item.id),
-  set: {
-  quantidade: quantidade
-  }
-  });
-  const index = carrinhoItems.value.findIndex(carrinhoItem => carrinhotItem.id === item.id);
-  if (index !== -1) {
-  carrinhoItems.value[index].quantidade = quantidade;
-  }
-  } catch (error) {
-  console.error('Erro ao atualizar a quantidade no QuasarDB:', error);
-  }
-  };
- 
-
-  const removeItem = async (item) => {
-  try {
-  const table = cluster.table(cartTableName);
-  await table.delete({
-  where: qdb.eq(qdb.stringCol('id'), item.id)
-  });
-  carrinhotItems.value = carrinhotItems.value.filter(carrinhotItem => carrinhotItem.id !== item.id);
-  } catch (error) {
-  console.error('Erro ao remover item do QuasarDB:', error);
-  }
-  };
- 
-
-  return {
-  carrinhotItems,
-  subtotal,
-  total,
-  quantidadeNova,
-  removeItem
-  };
-  }
- });
- </script>
+<style>
+.imagem {
+  height: 300px;
+  width: 300px;
+}
+.q-page {
+  padding: 20px;
+}
+</style>
