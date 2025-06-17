@@ -90,7 +90,6 @@ export default {
   popupAdicionado.value = true
 }
     return {
-      carrinhoStore,
       date,
       proxyDate,
       popupAdicionado,
