@@ -170,6 +170,10 @@
 </template>
 
 <script>
+import imagem1 from '../assets/15anos.png';
+import imagem2 from '../assets/casamentoJean.png';
+
+
 export default {
   name: 'HomePage',
   data() {
@@ -197,13 +201,13 @@ export default {
           id: 1,
           title: 'Festas de 15 Anos',
           description: 'Decorações sofisticadas para aniversários marcantes',
-          img: 'https://sdmntprnorthcentralus.oaiusercontent.com/files/00000000-e948-622f-be67-2ec316cf1f93/raw?se=2025-06-17T22%3A10%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=1bb9344d-d621-5d48-9c0c-314cd95fea3e&skoid=1e6af1bf-6b08-4a04-8919-15773e7e7024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-17T13%3A23%3A31Z&ske=2025-06-18T13%3A23%3A31Z&sks=b&skv=2024-08-04&sig=m1IR%2BCfBYKj%2BNaVImz8l5TX5gp%2B7QOVSjCO1odIpb1w%3D',
+          img: imagem1, 
         },
         {
           id: 2,
           title: 'Casamentos',
           description: 'Decorações elegantes para o seu grande dia.',
-          img: 'https://sdmntprnorthcentralus.oaiusercontent.com/files/00000000-b538-622f-a93b-7069cede6b35/raw?se=2025-06-17T22%3A10%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=40d8b50f-1d4f-5da8-9819-41e238d6999a&skoid=1e6af1bf-6b08-4a04-8919-15773e7e7024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-17T11%3A35%3A02Z&ske=2025-06-18T11%3A35%3A02Z&sks=b&skv=2024-08-04&sig=eItCf6qX/EMUm2jsqI697DnABJhlxXH9sQVU/KaaKxo%3D',
+          img: imagem2,
         },
         {
           id: 3,
