@@ -23,7 +23,7 @@
 
     </q-list>
 
-    <q-btn label="Finalizar Aluguel" color="primary" @click="mostrarDialogo = true" />
+    <q-btn label="Finalizar Aluguel" color="primary" @click="mostrarDialogo = true" :disable="carrinho.length === 0" />
 
     <q-dialog v-model="mostrarDialogo">
   <q-card>
@@ -51,7 +51,7 @@
 
     <q-card-actions align="right">
       <q-btn flat label="Cancelar" v-close-popup />
-      <q-btn flat label="Finalizar Compra" color="primary" @click="finalizar" />
+      <q-btn flat label="Finalizar Compra" color="primary" @click="finalizar" :disable="!metodo" />
     </q-card-actions>
   </q-card>
 </q-dialog>
