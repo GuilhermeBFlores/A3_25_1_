@@ -1,67 +1,107 @@
 <template>
-  <q-page>
-    <h2>Produtos</h2>
-    <q-list>
-      <q-item v-for="produto in carrinhoStore.produtos" :key="produto.id">
-        <q-item-section>
-          <q-item-label>{{ produto.nome }}</q-item-label>
-          <q-item-label caption>{{ produto.descricao }}</q-item-label>
-          <q-item-label>R$ {{ produto.preco.toFixed(2) }}</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn
-            color="primary"
-            label="Adicionar ao Carrinho"
-            @click="carrinhoStore.adicionarAoCarrinho(produto.id, 1)"
-          />
-        </q-item-section>
-      </q-item>
+  <q-page class="q-pa-md">
+    <q-toolbar><q-toolbar-title>Carrinho</q-toolbar-title></q-toolbar>
+
+    <q-list bordered>
+      <q-item v-for="(item, index) in carrinho" :key="index">
+  <q-item-section avatar>
+    <q-avatar square size="56px">
+      <img :src="item.img" />
+    </q-avatar>
+  </q-item-section>
+
+  <q-item-section>
+    <q-item-label>{{ item.nome }}</q-item-label>
+    <q-item-label caption>R$ {{ item.preco.toFixed(2) }}</q-item-label>
+    <q-item-label caption>Data: {{ item.data }}</q-item-label>
+  </q-item-section>
+
+  <q-item-section side>
+    <q-btn flat icon="delete" color="negative" @click="remover(index)" />
+  </q-item-section>
+</q-item>
+
     </q-list>
 
-    <h2>Carrinho</h2>
-    <q-list>
-      <q-item v-for="item in carrinhoStore.carrinho" :key="item.produtoId">
-        <q-item-section>
-          <q-item-label>
-            {{ getProdutoNome(item.produtoId) }} ({{ item.quantidade }}x)
-          </q-item-label>
-          <q-item-label caption>R$ {{ item.precoTotal.toFixed(2) }}</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn
-            color="negative"
-            label="Remover"
-            @click="carrinhoStore.removerDoCarrinho(item.produtoId)"
-          />
-        </q-item-section>
-      </q-item>
-    </q-list>
-    <h3>Total: R$ {{ carrinhoStore.totalCarrinho }}</h3>
+    <q-btn label="Finalizar Aluguel" color="primary" @click="mostrarDialogo = true" />
+
+    <q-dialog v-model="mostrarDialogo">
+  <q-card>
+    <q-card-section class="text-h6">
+      Escolha o método de pagamento
+    </q-card-section>
+
+    <q-card-section>
+      <q-option-group
+        v-model="metodo"
+        :options="[
+          { label: 'Cartão de Crédito', value: 'cartao' },
+          { label: 'PIX', value: 'pix' },
+          { label: 'Dinheiro', value: 'dinheiro' }
+        ]"
+        type="radio"
+      />
+    </q-card-section>
+
+    <q-separator />
+
+    <q-card-section class="text-subtitle1">
+      Total: <strong>R$ {{ totalCarrinho.toFixed(2) }}</strong>
+    </q-card-section>
+
+    <q-card-actions align="right">
+      <q-btn flat label="Cancelar" v-close-popup />
+      <q-btn flat label="Finalizar Compra" color="primary" @click="finalizar" />
+    </q-card-actions>
+  </q-card>
+</q-dialog>
   </q-page>
+
+  <q-dialog v-model="popupFinalizado">
+  <q-card>
+    <q-card-section class="text-h6">✅ Compra finalizada!</q-card-section>
+    <q-card-section>
+      Método de pagamento: <strong>{{ metodo.toUpperCase() }}</strong><br>
+    </q-card-section>
+    <q-card-actions align="right">
+      <q-btn flat label="Fechar" v-close-popup />
+    </q-card-actions>
+  </q-card>
+</q-dialog>
+
 </template>
 
 <script setup>
-import { useCarrinhoStore } from 'src/stores/carrinho-store';
-import { onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue'
+import { obterCarrinho, limparCarrinho } from 'src/services/carrinhoService'
+import { removerItemPorIndex } from 'src/services/carrinhoService'
+import { useQuasar } from 'quasar'
 
-const carrinhoStore = useCarrinhoStore();
+const carrinho = ref([])
+const $q = useQuasar()
+const mostrarDialogo = ref(false)
+const metodo = ref(null)
+const popupFinalizado = ref(false)
 
 onMounted(() => {
-  carrinhoStore.carregarDados();
-});
+  carrinho.value = obterCarrinho()
+})
+function remover(index) {
+  removerItemPorIndex(index)
+  carrinho.value = obterCarrinho()
+}
+const totalCarrinho = computed(() =>
+  carrinho.value.reduce((total, item) => total + item.preco, 0)
+)
+function finalizar() {
+  if (!metodo.value) {
+    $q.notify({ type: 'warning', message: 'Escolha uma forma de pagamento!' })
+    return
+  }
 
-function getProdutoNome(produtoId) {
-  const produto = carrinhoStore.produtos.find(p => p.id === produtoId);
-  return produto ? produto.nome : 'Produto não encontrado';
+  limparCarrinho()
+  carrinho.value = []
+  mostrarDialogo.value = false
+  popupFinalizado.value = true
 }
 </script>
-
-<style>
-.imagem {
-  height: 300px;
-  width: 300px;
-}
-.q-page {
-  padding: 20px;
-}
-</style>
