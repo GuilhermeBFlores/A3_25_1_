@@ -1,0 +1,23 @@
+[
+{
+    "id": 1,
+    "name": "Decoração Unicórnio",
+    "theme": "Infantil",
+    "price": 150.00,
+    "available": true
+  },
+  {
+    "id": 2,
+    "name": "Decoração Boho Chic",
+    "theme": "Casamento",
+    "price": 300.00,
+    "available": true
+  },
+  {
+    "id": 3,
+    "name": "Decoração Super-Heróis",
+    "theme": "Infantil",
+    "price": 120.00,
+    "available": false
+  }
+]
