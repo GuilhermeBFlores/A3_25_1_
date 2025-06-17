@@ -1,24 +1,20 @@
 <template>
-  <q-page class="q-pa-md">
-    <!-- Imagem externa via URL -->
-    <q-img
-      src="https://down-br.img.susercontent.com/file/e02c1afeabbcd654bbc8c05f3cf1a7bf"
-      alt="Imagem decorativa sobre festas"
-      width="500"
-      height="300"
-    />
+  <q-page class="q-pa-md about-page">
+    <div class="bg-overlay">
+      <q-card class="my-card q-pa-md shadow-4" style="max-width: 800px; width: 100%;">
+      
 
-
-    <h2>Sobre nós</h2>
-    <p>
-      Somos o Sonho de Festas e amamos transformar momentos especiais em lembranças inesquecíveis.
-      Aqui, a gente acredita que cada festa tem que ter a cara de quem está comemorando, cheia de
-      personalidade, alegria e muito carinho nos detalhes. Tudo começou com a vontade de deixar cada
-      celebração mais mágica, seja um aniversário divertido, um chá revelação cheio de amor ou
-      aquele casamento que parece conto de fadas. A gente cuida de tudo com muito cuidado e criatividade,
-      como se fosse pra gente mesmo. Se você também ama uma festa bem feita, com emoção e aquele toque
-      especial que faz toda a diferença, chegou ao lugar certo. Vem sonhar com a gente!
-    </p>
+        <q-card-section>
+          <div class="text-h5 text-primary text-center q-mb-sm">Sobre Nós</div>
+          <div class="text-body1 text-justify text-black">
+            Bem-vindo à <strong>Sonho de Festas</strong>, onde cada celebração se transforma em um momento mágico! 🎉<br><br>
+            Somos apaixonados por criar experiências únicas e memoráveis. Desde aniversários encantadores até casamentos de conto de fadas, cuidamos de cada detalhe com criatividade, carinho e dedicação. <br><br>
+            Acreditamos que uma boa festa reflete a alma de quem comemora. Por isso, personalizamos tudo para que você se sinta especial em cada instante. <br><br>
+            Se você valoriza emoção, beleza e aquele toque especial que só uma boa festa tem, vem com a gente tornar seu sonho realidade!
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -29,31 +25,31 @@ export default {
 </script>
 
 <style scoped>
-.about-img {
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+.about-page {
+  background-image: url('https://images.unsplash.com/photo-1498940757830-82f7813bf178?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFsJUMzJUI1ZXMlMjBjb2xvcmlkb3N8ZW58MHx8MHx8fDA%3D');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.my-card {
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9); /* Levemente translúcido */
+  backdrop-filter: blur(4px);
+}
+
+.rounded-borders {
+  border-radius: 16px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.about-img:hover {
-  transform: scale(1.03);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
 
-.q-page {
-  background-color: #ffffff;
+.rounded-borders:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
-
-h2 {
-  text-align: center;
-  font-family: 'Playfair Display', serif;
-  margin-top: 24px;
-}
-
-p {
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.6;
-  text-align: justify;
-  margin-top: 16px;
-}
-
 </style>
