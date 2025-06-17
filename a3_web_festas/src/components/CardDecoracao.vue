@@ -89,7 +89,12 @@ export default {
   adicionarItem(item)
   popupAdicionado.value = true
 }
+
+    return { 
+      
+
     return {
+       main
       date,
       proxyDate,
       popupAdicionado,
