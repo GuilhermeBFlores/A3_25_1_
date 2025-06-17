@@ -89,8 +89,8 @@ export default {
   adicionarItem(item)
   popupAdicionado.value = true
 }
-    return {
-      carrinhoStore,
+    return { 
+      
       date,
       proxyDate,
       popupAdicionado,

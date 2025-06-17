@@ -4,10 +4,10 @@
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
-        <q-toolbar-title>Decoração de Festas</q-toolbar-title>
+        <q-toolbar-title>Sonho de Festas</q-toolbar-title>
         <q-space />
-        <q-btn flat round icon="phone" href="tel:+5511999999999" />
-        <q-btn flat round icon="fab fa-whatsapp" href="https://wa.me/5511999999999" />
+        <q-btn flat round icon="phone" href="tel:+51982177715" />
+        <q-btn flat round icon="whatsapp" href="https://wa.me/51982177715" />
       </q-toolbar>
     </q-header>
 
@@ -37,7 +37,7 @@
           <q-item-section avatar>
             <q-icon name="contact_mail" />
           </q-item-section>
-          <q-item-section>Contato</q-item-section>
+          <q-item-section>Contatos</q-item-section>
         </q-item>
       </q-list>
     </q-drawer>
@@ -52,7 +52,7 @@
           control-color="white"
           navigation
           arrows
-          height="80vh"
+          height="60vh"
           class="banner"
         >
           <q-carousel-slide
@@ -62,9 +62,9 @@
             :img-src="banner.img"
           >
             <div class="absolute-center text-center text-white">
-              <h2 class="text-h3">{{ banner.title }}</h2>
-              <p class="text-subtitle1">{{ banner.subtitle }}</p>
-              <q-btn color="primary" label="Sobre nós" to="/Sobre" />
+              <h2 class="text-h3 banner-text">{{ banner.title }}</h2>
+              <p class="text-subtitle1 banner-text">{{ banner.subtitle }}</p>
+              <q-btn color="blue" label="Sobre nós" to='/Sobre' />
             </div>
           </q-carousel-slide>
         </q-carousel>
@@ -79,7 +79,7 @@
               class="col-12 col-sm-6 col-md-4"
             >
               <q-card class="service-card">
-                <q-img :src="service.img" height="200px" />
+                <q-img :src="service.img" height="400px" />
                 <q-card-section>
                   <div class="text-h6">{{ service.title }}</div>
                   <div class="text-subtitle2">{{ service.description }}</div>
@@ -146,16 +146,15 @@
         <div class="col-12 col-sm-4 text-center q-mb-sm">
           <h6 class="text-h6">Contato</h6>
           <p class="q-mb-sm">
-            <q-icon name="phone" size="sm" /> (11) 99999-9999<br>
-            <q-icon name="fab fa-whatsapp" size="sm" /> (11) 99999-9999<br>
-            <q-icon name="email" size="sm" /> contato@decoracaofestas.com
+            <q-icon name="phone" size="sm" /> (51) 982177715<br>
+            <q-icon name="phone" size="sm" /> (51) 923523141<br>
+            <q-icon name="email" size="sm" /> sonhofestas@gmail.com
           </p>
         </div>
         <div class="col-12 col-sm-4 text-center q-mb-sm">
           <h6 class="text-h6">Links Úteis</h6>
           <p class="q-mb-sm">
-            <a href="/Sobre" class="text-white">Sobre Nós</a><br>
-            <a href="/servicos" class="text-white">Serviços</a><br>
+            <a href="/Servicos" class="text-white">Serviços</a> 
             <a href="/contato" class="text-white">Contato</a>
           </p>
         </div>
@@ -167,7 +166,7 @@
         </div>
       </div>
       <div class="text-center q-py-sm text-caption">
-        © 2025 Decoração de Festas. Todos os direitos reservados.
+        © 2025 Sonho de Festas. Todos os direitos reservados.
       </div>
     </q-footer>
   </q-layout>
@@ -180,18 +179,18 @@ export default {
     return {
       drawer: false,
       slide: 0,
-      testimonialSlide: 0,
+      testimonialSlide:0,
       photoDialog: false,
       selectedPhoto: '',
       showFooter: false,
       banners: [
         {
-          img: 'https://cdn.pixabay.com/photo/2017/08/06/12/06/people-2591874_1280.jpg',
+          img: 'https://inspiresuafesta.com/wp-content/uploads/2013/06/decoracao-circo-patati-patata-ccs-decoracoes-e-eventos-cenario.jpg',
           title: 'Transforme Sua Festa em um Momento Mágico',
           subtitle: 'Decorações personalizadas para todos os tipos de eventos.',
         },
         {
-          img: 'https://cdn.pixabay.com/photo/2016/11/23/17/24/balloons-1853766_1280.jpg',
+          img: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgDAHHaV23QOLICujSjjZeDxlEyfQSZuYx-TzorpAYVhEP0MNN3dBlvc9lUjtmNrHMs2f5hsBsIkEHKRKqIU7Zbfq9r9UPidZoLjr_87iRvX-uM2OmjPcJxLxCq41Iq4ir2A88kblT-a1hV/s1600/IMG_3808.JPG',
           title: 'Festas Infantis Inesquecíveis',
           subtitle: 'Temas criativos e coloridos para alegrar os pequenos.',
         },
@@ -199,28 +198,28 @@ export default {
       services: [
         {
           id: 1,
-          title: 'Festas Infantis',
-          description: 'Decorações temáticas para aniversários infantis.',
-          img: 'https://cdn.pixabay.com/photo/2016/11/29/12/56/balloons-1869790_1280.jpg',
+          title: 'Festas de 15 Anos',
+          description: 'Decorações sofisticadas para aniversários marcantes',
+          img: 'https://sdmntprnorthcentralus.oaiusercontent.com/files/00000000-e948-622f-be67-2ec316cf1f93/raw?se=2025-06-17T22%3A10%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=1bb9344d-d621-5d48-9c0c-314cd95fea3e&skoid=1e6af1bf-6b08-4a04-8919-15773e7e7024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-17T13%3A23%3A31Z&ske=2025-06-18T13%3A23%3A31Z&sks=b&skv=2024-08-04&sig=m1IR%2BCfBYKj%2BNaVImz8l5TX5gp%2B7QOVSjCO1odIpb1w%3D',
         },
         {
           id: 2,
           title: 'Casamentos',
           description: 'Decorações elegantes para o seu grande dia.',
-          img: 'https://cdn.pixabay.com/photo/2016/09/10/12/40/wedding-1658726_1280.jpg',
+          img: 'https://sdmntprnorthcentralus.oaiusercontent.com/files/00000000-b538-622f-a93b-7069cede6b35/raw?se=2025-06-17T22%3A10%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=40d8b50f-1d4f-5da8-9819-41e238d6999a&skoid=1e6af1bf-6b08-4a04-8919-15773e7e7024&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-17T11%3A35%3A02Z&ske=2025-06-18T11%3A35%3A02Z&sks=b&skv=2024-08-04&sig=eItCf6qX/EMUm2jsqI697DnABJhlxXH9sQVU/KaaKxo%3D',
         },
         {
           id: 3,
-          title: 'Eventos Corporativos',
-          description: 'Soluções sofisticadas para eventos empresariais.',
-          img: 'https://cdn.pixabay.com/photo/2017/06/28/14/53/confetti-2451056_1280.jpg',
+          title: 'Eventos infantis',
+          description: 'Decorações descontraidas que agradam os olhos da molecada',
+          img: 'https://i.pinimg.com/originals/23/cf/d8/23cfd89c3244ce5f94c54956e0ec3f45.jpg',
         },
       ],
       gallery: [
-        { id: 1, src: 'https://cdn.pixabay.com/photo/2016/11/29/12/56/balloons-1869790_1280.jpg' },
-        { id: 2, src: 'https://cdn.pixabay.com/photo/2017/08/06/12/06/people-2591874_1280.jpg' },
-        { id: 3, src: 'https://cdn.pixabay.com/photo/2016/09/10/12/40/wedding-1658726_1280.jpg' },
-        { id: 4, src: 'https://cdn.pixabay.com/photo/2017/06/28/14/53/confetti-2451056_1280.jpg' },
+        { id: 1, src: 'https://bellafestas.com.br/wp-content/uploads/2016/06/decoracao-festa-infantil-provencal-discoverykids.jpg' },
+        { id: 2, src: 'https://i.pinimg.com/474x/0c/bc/51/0cbc51b06ab09a3160a938913c2fc943.jpg' },
+        { id: 3, src: 'https://http2.mlstatic.com/D_NQ_NP_798304-MLB46336481605_062021-O-painel-redondo-circular-decoraco-lanterna-verde-displays.webp' },
+        { id: 4, src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtSop5pODCry0PMWRlZgyXr4Y4VL5CTT-LiQ&s' },
       ],
       testimonials: [
         {
@@ -228,7 +227,7 @@ export default {
           author: 'Ana Silva',
         },
         {
-          text: 'Profissionalismo e criatividade! Meu casamento ficou exatamente como sonhei.',
+          text: 'Profissionalismo e criatividade! Meu casamento do SUPER GREMIO ficou exatamente como sonhei.',
           author: 'Mariana Costa',
         },
       ],
@@ -249,8 +248,8 @@ export default {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const threshold = 100; // Distância do final da página para mostrar o rodapé
-      if (scrollTop + windowHeight >= documentHeight - threshold) {
+      const threshold =400; // Distância do final da página para mostrar o rodapé
+      if (scrollTop + windowHeight >= documentHeight - threshold + 100) {
         this.showFooter = true;
       } else {
         this.showFooter = false;
@@ -267,8 +266,12 @@ export default {
 </script>
 
 <style scoped>
+
+.banner-text {
+  text-shadow:2px 89px   10px rgba(20, 19, 99, 0.7); /* Borda preta suave */
+}
 .banner {
-  height: 80vh;
+  height:  80vh;
   background-size: cover;
   background-position: center;
 }
@@ -276,7 +279,7 @@ export default {
   transition: transform 0.3s;
 }
 .service-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.15);
 }
 .gallery-img {
   object-fit: cover;
@@ -285,9 +288,9 @@ export default {
   border-radius: 8px;
 }
 .footer {
-  background-color: #2c3e50;
+  background-color: #01012c;
   color: white;
-  padding: 10px 0; /* Reduzido o padding */
+  padding: 50px 0; /* Reduzido o padding */
 }
 .footer h6 {
   margin-top: 0;
