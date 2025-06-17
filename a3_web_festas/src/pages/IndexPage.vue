@@ -84,9 +84,6 @@
                   <div class="text-h6">{{ service.title }}</div>
                   <div class="text-subtitle2">{{ service.description }}</div>
                 </q-card-section>
-                <q-card-actions>
-                  <q-btn flat color="primary" label="Ver Detalhes" @click="viewServiceDetails(service.id)" />
-                </q-card-actions>
               </q-card>
             </div>
           </div>
@@ -248,7 +245,7 @@ export default {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const threshold =400; // Distância do final da página para mostrar o rodapé
+      const threshold =100; // Distância do final da página para mostrar o rodapé
       if (scrollTop + windowHeight >= documentHeight - threshold + 100) {
         this.showFooter = true;
       } else {
