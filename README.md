@@ -1,6 +1,6 @@
-A3 Desenvolvimento Web - Agendamento 
+<h1>A3 Desenvolvimento Web - Agendamento </h1> 
 
-Um site de agendamento para orudutos de decoração de festas
+Um site de agendamento para produtos de decoração de festas
 
 ### 📋 Pré-requisitos
 
